@@ -12,16 +12,16 @@
 // 첫번째 사람을 friends에서 찾고 두번째 사람도 friends에서 찾아서 
 // [첫번째 사람 index][두번째 사람 index]로 표를 만들면될듯
 
-// 통계는 첫뻔재로 해당 이름이 몇번 나왔는지 += 1로 몇번줬는지
+// 통계는 첫번째로 해당 이름이 몇번 나왔는지 += 1로 몇번줬는지
 // 두번째로 해당 이름이 몇번 나왔는지 += 1로 몇번 받았는지
 // 선물지수는 첫번째-두번째
 
 class Solution {
   public int solution(String[] friends, String[] gifts) {
       int MaxGift = 0;
-      int[][] giftTable = new int[friends.length][friends.length];
-      int[][] giftcountTable = new int[friends.length][3];
-      int[][] resultTable = new int [friends.length][1];
+      int[][] giftTable = new int[friends.length][friends.length];  // 통계표
+      int[][] giftcountTable = new int[friends.length][3];          // 선물지수 표
+      int[][] resultTable = new int [friends.length][1];            // 결과 표(받을 선물의 개수)
       
       // 우선 gifts를 split으로 나눠야할듯
       for(int i = 0; i < gifts.length; i++) {
@@ -29,7 +29,7 @@ class Solution {
           String giver = result[0]; // 주는 사람(짝수)
           String receiver =result[1]; // 받는 사람(홀수)
           
-          // 예시처럼 두개의 지표를 우선 만들어야할거 같음.
+          // 통계표
           int giverIndex = -1;
           int receiverIndex = -1;
           for(int j = 0; j < friends.length; j++) {
@@ -48,8 +48,7 @@ class Solution {
           
       }
       
-      // 이제 선물 지수를 구해야함
-      // 준선물 대입
+      // 준 선물
       for(int x = 0; x < friends.length; x++) {
           for(int y = 0; y < friends.length; y++) {
               giftcountTable[x][0] += giftTable[x][y];
