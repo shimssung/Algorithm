@@ -1,7 +1,8 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
+// 내가 사용한 Comparator는 정렬만 가능하지만 stream을 사용하면
+// 정렬, 매핑, 필터링, 집계 등 다양한 것들을 연속적으로 가능하기 때문에
+// stream을 배우는게 좋아보인다.
 class Solution {
     // data: 데이터 [code, date, maxumum, remain]
     // ext: 뽑아낼 데이터 기준
