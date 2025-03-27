@@ -5,28 +5,23 @@ class Solution {
     // 이중 반복문을 돌리고 #이 있는 위치의 X, Y의 최대와 최소를 알고있으면 될거같음.
     public int[] solution(String[] wallpaper) {
         
-        int Xmin = 50;
+        int Xmin = wallpaper[0].length();
         int Xmax = 0;
-        int Ymin = 50;
+        int Ymin = wallpaper.length;
         int Ymax = 0;
         
         for(int i = 0; i < wallpaper.length; i++) {
             char[] paper = wallpaper[i].toCharArray();
             for(int j = 0; j < paper.length; j++) {
                 if(paper[j] == '#') {
-                    if(Xmin > j) {
-                        Xmin = j; 
-                    } 
-                    if(Xmax < j){
-                        Xmax = j; 
-                    }
                     
-                    if(Ymin > i) {
-                        Ymin = i; 
-                    } 
-                    if(Ymax < i){
-                        Ymax = i; 
-                    }
+                    Xmin = Xmin > j ? j : Xmin;
+                    
+                    Xmax = Xmax < j ? j : Xmax;
+                    
+                    Ymin = Ymin > i ? i : Ymin;
+                    
+                    Ymax = Ymax < i ? i : Ymax;
                     
                 }
             }
