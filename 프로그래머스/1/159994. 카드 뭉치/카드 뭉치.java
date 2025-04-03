@@ -26,11 +26,13 @@ class Solution {
                 card2++;
                 count++;
                 continue;
-            } 
+            } else {
+                return "No";
+            }
         }
         
-        answer =  (cards1.length == card1 && cards2.length == card2 || count == goal.length) ? "Yes" : "No";
         
-        return answer;
+        
+        return "Yes";
     }
 }
