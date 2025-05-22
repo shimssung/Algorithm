@@ -2,9 +2,10 @@ import java.util.Arrays;
 
 class Solution {
     public int solution(int k, int m, int[] score) {
+        
         int answer = 0;
         
-        // 점수 내림차순 정렬
+        // 점수 오름차순 정렬
         Arrays.sort(score);
 
         int length = score.length;
@@ -13,7 +14,6 @@ class Solution {
             int minInBox = score[length - i - m]; // 상자 내 최소 점수
             answer += minInBox * m;
         }
-        
         
         return answer;
     }
