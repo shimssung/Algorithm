@@ -6,13 +6,9 @@ class Solution {
         int answer = 0;
         
         for(int x = 0; x < number.length; x++) {
-            int num1 = number[x];
             for(int y = x+1; y < number.length; y++) {
-                int num2 = number[y];
                 for(int z = y+1; z < number.length; z++){
-                    int num3 = number[z];
-                    
-                    if((num1 + num2 + num3) == 0) {answer++;}
+                    if(number[x] + number[y] + number[z] ==  0) {answer++;}
                 }
             }
         }
