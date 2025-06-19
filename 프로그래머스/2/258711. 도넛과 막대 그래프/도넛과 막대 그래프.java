@@ -1,4 +1,3 @@
-import java.util.HashMap;
 class Solution {
     // 들어오는 간선 : in, 나가는 간선 : out
     // 루트 : in = 0 && out >= 2 일때
@@ -7,37 +6,53 @@ class Solution {
     // 8자 : 중앙은 in, out = 2이며, 나머지는 1일때
     public int[] solution(int[][] edges) {
         
-        HashMap<Integer, Integer> in = new HashMap<>();
-        HashMap<Integer, Integer> out = new HashMap<>();
+        // 문제에서 정점 번호의 최댓값은 1_000_000
+        int MAX = 1_000_000;
         
-        int[] answer = new int[4];
+        /* 1) 정점별 in-degree / out-degree를 저장할 배열 준비
+              - 인덱스: 정점 번호
+              - 값   : 해당 정점의 차수(간선 수) */
+        int[] indeg  = new int[MAX + 1];
+        int[] outdeg = new int[MAX + 1];
         
-        for(int[] e : edges) {
-            // getOrDefault(key, value)는 key값이 없으면 value를 반환하고 있으면 그대로 key값을 반환한다.
-            out.put(e[0], out.getOrDefault(e[0], 0) + 1);
-            in.put(e[1], in.getOrDefault(e[1], 0) + 1);
+        // 2) 모든 간선을 한 번 훑으며 차수를 계산 
+        for (int[] e : edges) {
+            outdeg[e[0]]++;   // 나가는 간선 +1
+            indeg[e[1]]++;    // 들어오는 간선 +1
         }
         
-        // keySet()은 Map에 들어있는 키만 모아놓은 Set뷰를 돌려주는 메서드
-        for(int node : out.keySet()) {
-            if(out.get(node) >= 2) {
-                if(!in.containsKey(node)) { // out이 2이상이면서 in이 없는 node : 루트
-                    answer[0] = node;
-                } else {
-                answer[3] += 1; // out이 2이상이면서 in이 있으면 : 8자
-            }
-            } 
-        }
-        
-        
-        for(int node : in.keySet()) {
-            if(!out.containsKey(node)) { // in이 있는 node가 out이 없으면 막대
-                answer[2] += 1;
+        /* 3) ‘생성한 정점(루트)’ 찾기
+              조건: indeg == 0 && outdeg ≥ 2
+              문제 조건상 이런 정점은 정확히 1개 */
+        int root = 0;
+        for (int node = 1; node <= MAX; node++) {
+            if (indeg[node] == 0 && outdeg[node] >= 2) {
+                root = node;
+                break;
             }
         }
         
-        answer[1] = out.get(answer[0]) - answer[2] - answer[3];
+        /* 4) 8자·막대 개수를 카운트
+              - 8자 중앙: out >= 2 && indeg > 0
+              - 막대 끝 : out == 0 && indeg > 0
+              ※ 도넛은 이후에 총개수에서 빼서 계산     */
+        int eight = 0;   // 8자 그래프 수
+        int bar   = 0;   // 막대 그래프 수
         
-        return answer;
+        for (int node = 1; node <= MAX; node++) {
+            if (outdeg[node] >= 2 && indeg[node] > 0) {
+                eight++;          // 8자 중앙
+            }
+            if (outdeg[node] == 0 && indeg[node] > 0) {
+                bar++;            // 막대 끝
+            }
+        }
+        
+        /* 5) 도넛 개수 = (루트에서 뻗은 전체 그래프 수) - 막대 - 8자
+              └ 루트의 out-degree 가 바로 “총 그래프 개수” */
+        int donut = outdeg[root] - bar - eight;
+        
+        /* 6) 결과 형식: [루트, 도넛 수, 막대 수, 8자 수] */
+        return new int[] { root, donut, bar, eight };
     }
 }
