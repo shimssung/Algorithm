@@ -1,34 +1,30 @@
 class Solution {
-    // wallpaper: 바탕화면의 상태 (문자열 배열, 빈칸: ".", 파일이 있는칸: "#")
-    
-    // 최소한의 이동거리를 갖는 한 번의 드래그로 모든 파일을 선택해서 한 번에 지우려고한다. 
-    // 이중 반복문을 돌리고 #이 있는 위치의 X, Y의 최대와 최소를 알고있으면 될거같음.
     public int[] solution(String[] wallpaper) {
+        int[] answer = new int[4];
         
-        int Xmin = wallpaper[0].length();
-        int Xmax = 0;
-        int Ymin = wallpaper.length;
-        int Ymax = 0;
+        // 반복문을 통해 S와 E 지점을 찾아라
+        // S는 x, y가 가장 작은 지점이 들어가야 하므로 최대값을 넣어놓는다.
+        // E는 x, y가 가장 큰 지점을 찾아 넣어야 하므로 최소값을 넣어놓늗나.
+        String[] l = wallpaper[0].split("");
+        int[] S = {wallpaper.length, l.length};
+        int[] E = {0,0};
         
-        for(int i = 0; i < wallpaper.length; i++) {
-            char[] paper = wallpaper[i].toCharArray();
-            for(int j = 0; j < paper.length; j++) {
-                if(paper[j] == '#') {
-                    
-                    Xmin = Xmin > j ? j : Xmin;
-                    
-                    Xmax = Xmax < j ? j : Xmax;
-                    
-                    Ymin = Ymin > i ? i : Ymin;
-                    
-                    Ymax = Ymax < i ? i : Ymax;
-                    
-                }
+        for(int x = 0; x < wallpaper.length; x++) {
+            String[] Row = wallpaper[x].split("");
+            for(int y = 0; y < Row.length; y++) {
+               if(Row[y].equals("#")) {
+                   S[0] = Math.min(S[0], x);
+                   S[1] = Math.min(S[1], y);
+                   E[0] = Math.max(E[0], x);
+                   E[1] = Math.max(E[1], y);
+               } 
             }
         }
+        answer[0] = S[0];
+        answer[1] = S[1];
+        answer[2] = E[0]+1;
+        answer[3] = E[1]+1;
         
-        
-        int[] answer = {Ymin, Xmin, Ymax+1, Xmax+1};
         return answer;
     }
 }
