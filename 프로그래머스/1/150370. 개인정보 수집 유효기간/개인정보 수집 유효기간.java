@@ -43,6 +43,10 @@ class Solution {
             }
         }
 
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        int[] result = new int[answer.size()];
+        for (int i = 0; i < answer.size(); i++) {
+            result[i] = answer.get(i);
+        }
+        return result;
     }
 }
