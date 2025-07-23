@@ -1,60 +1,48 @@
 import java.util.*;
 
 class Solution {
-    // today : 오늘날짜
-    // terms : [약관종류, 유효기간]
-    // privacies : [날짜, 약관종류]
-    
-    // 오늘날짜를 년, 월, 일을 split을 이용해 나눠서 저장
-    // 월에 약관에 해당하는 기간을 더해주고 12로 나눈 몫을 년에 더하고, 12로 나눈 나머지를 월에 넣어준다.
-    // 일은 그대로 유지
-    
-    // 후 해당 날짜가 오늘날짜를 기준으로 유효기간이 지났는지 확인 후 지났으면 result에 index+1 로 넣기
     public int[] solution(String today, String[] terms, String[] privacies) {
-        
-        String[] toDay = today.split("\\.");
+        List<Integer> answer = new ArrayList<>();
 
-        int year = Integer.parseInt(toDay[0]);
-        int month = Integer.parseInt(toDay[1]);
-        int day = Integer.parseInt(toDay[2]);
-        
-        HashMap<String, Integer> termsMap = new HashMap<>();
-        
-        for(int i = 0; i < terms.length; i++) {
-            String[] s_terms = terms[i].split(" ");
-            termsMap.put(s_terms[0], Integer.parseInt(s_terms[1]));
+        // 약관 종류별 유효기간 저장
+        HashMap<String, Integer> tMap = new HashMap<>();
+        for (String t : terms) {
+            String[] s = t.split(" ");
+            tMap.put(s[0], Integer.parseInt(s[1]));
         }
-        
-        List<Integer> expiredList = new ArrayList<>();
-        
-        for(int i = 0; i < privacies.length; i++) {
-            String[] s_privacies = privacies[i].split(" ");
-            String[] p_today = s_privacies[0].split("\\.");
-            
-            int p_year = Integer.parseInt(p_today[0]);
-            int p_month = Integer.parseInt(p_today[1]) + termsMap.get(s_privacies[1]);
-            int p_day = Integer.parseInt(p_today[2]);
 
-            // 이 부분 좀 더 이해 필요
-            p_year += (p_month - 1) / 12;
-            p_month = (p_month - 1) % 12 + 1;
+        // 오늘 날짜
+        String[] todays = today.split("\\.");
+        int todayY = Integer.parseInt(todays[0]);
+        int todayM = Integer.parseInt(todays[1]);
+        int todayD = Integer.parseInt(todays[2]);
 
-            
-            if (p_year < year ||
-                (p_year == year && p_month < month) ||
-                (p_year == year && p_month == month && p_day <= day)) {
-            
-                expiredList.add(i + 1);
+        for (int i = 0; i < privacies.length; i++) {
+            String[] result = privacies[i].split(" ");
+            String[] s1 = result[0].split("\\.");
+
+            int year = Integer.parseInt(s1[0]);
+            int month = Integer.parseInt(s1[1]);
+            int day = Integer.parseInt(s1[2]);
+
+            // 약관 기간 더하기
+            int plusMonth = tMap.get(result[1]);
+            month += plusMonth;
+
+            // 년/월 정리
+            if (month > 12) {
+                year += (month - 1) / 12;
+                month = (month - 1) % 12 + 1;
+            }
+
+            // 오늘과 비교 (year, month, day 순)
+            if (year < todayY || 
+                (year == todayY && month < todayM) || 
+                (year == todayY && month == todayM && day <= todayD)) {
+                answer.add(i + 1); // 파기 대상
             }
         }
-        
-        int[] answer = new int[expiredList.size()];
-        for (int i = 0; i < expiredList.size(); i++) {
-            answer[i] = expiredList.get(i);
-        }
-        
-        
-        
-        return answer;
+
+        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
 }
