@@ -1,30 +1,32 @@
 class Solution {
-    
-    // 기사는 자신의 기사 번호의 약수 개수에 해당하는 공력력을 가진 무기를  구매하려한다. 단, 제한수치가 있음
-    
     public int solution(int number, int limit, int power) {
         int answer = 0;
-        
-        int[] result = new int[number];
-        
+
         for (int i = 1; i <= number; i++) {
-            
-            int count = 0;
-            
-            for(int j = 1; j * j<=i; j++) {
-                if (i % j == 0) {
-                    count++;
-                    if (j != i / j) count++;  // 짝이 되는 약수도 카운트
-                }
+            int count = countDivisors(i);
+            if (count > limit) {
+                answer += power;
+            } else {
+                answer += count;
             }
-            
-            result[i-1] = count > limit ? power : count;
         }
-        
-        for(int num : result) {
-            answer += num;
-        }
-        
+
         return answer;
     }
+
+    // 약수의 개수를 세는 함수
+    private int countDivisors(int num) {
+        int count = 0;
+        for (int i = 1; i * i <= num; i++) {
+            if (num % i == 0) {
+                if (i * i == num) {
+                    count += 1; // 제곱근이면 하나만 카운트
+                } else {
+                    count += 2; // 서로 다른 약수 두 개
+                }
+            }
+        }
+        return count;
+    }
+    
 }
