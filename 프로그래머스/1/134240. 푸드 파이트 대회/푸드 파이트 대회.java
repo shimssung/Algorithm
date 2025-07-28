@@ -1,21 +1,17 @@
 class Solution {
-
     public String solution(int[] food) {
-        StringBuilder left = new StringBuilder();
-
-        // 왼쪽 문자열 구성: 음식 번호 낮은 것부터
-        for (int i = 1; i < food.length; i++) {
-            int count = food[i] / 2;
-            for (int j = 0; j < count; j++) {
-                left.append(i);
+        String answer = "0";
+        
+        // food[0] : 물 항상 1개임
+        // food[i]는 해당 인덱스 음식의 개수 (짝수로만 사용가능)
+        // 0을 시작으로 맨 뒤의 음식부터 앞뒤로 더하는 방식이 좋아보임.
+        for(int i = food.length-1; i > 0; i--) {
+            int n = food[i]/2;
+            for(int j = 0; j < n; j++) {
+                answer = i + answer + i;
             }
         }
-
-        // 오른쪽은 왼쪽을 뒤집은 것
-        String right = left.reverse().toString();  // 뒤집은 뒤 다시 문자열로
-        left.reverse(); // 원래 방향으로 복구
-
-        // 가운데 물(0) 추가해서 조합
-        return left.toString() + "0" + right;
+        
+        return answer;
     }
 }
