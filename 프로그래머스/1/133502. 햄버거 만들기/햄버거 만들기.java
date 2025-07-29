@@ -1,21 +1,20 @@
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Stack;
 
 class Solution {
     public int solution(int[] ingredient) {
         int answer = 0;
         
-        List<Integer> list = new ArrayList<>();
+        Stack<Integer> s = new Stack<>();
         for(int i : ingredient) {
-            list.add(i);
-            int n = list.size();
+            s.push(i);
+            int n = s.size();
             if(n >= 4) {
-                if(list.get(n-1) == 1 && list.get(n-2) == 3 && list.get(n-3) == 2 && list.get(n-4) == 1) {
+                if(s.get(n-1) == 1 && s.get(n-2) == 3 && s.get(n-3) == 2 && s.get(n-4) == 1) {
                     answer += 1;
-                    list.remove(n-1);
-                    list.remove(n-2);
-                    list.remove(n-3);
-                    list.remove(n-4);
+                    s.pop();
+                    s.pop();
+                    s.pop();
+                    s.pop();
                 }
             }
         }
