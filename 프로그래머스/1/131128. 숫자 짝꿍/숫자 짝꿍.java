@@ -1,31 +1,42 @@
-import java.util.*;
+import java.util.HashMap;
 
 class Solution {
     public String solution(String X, String Y) {
-        int[] countX = new int[10];
-        int[] countY = new int[10];
+            
+        // 각 해쉬맵을 만들자. 공통이있으면 해당 해쉬맵중 작은값을 가져온 후 정렬
+        HashMap<String, Integer> Xmap = new HashMap<>();
+        HashMap<String, Integer> Ymap = new HashMap<>();
         
-        // 각 숫자의 등장 횟수 세기
+        char[] Xchar = X.toCharArray();
+        char[] Ychar = Y.toCharArray();
+        
         for (char ch : X.toCharArray()) {
-            countX[ch - '0']++; // 아스키코드를 정수로 변환
+            String s = String.valueOf(ch);
+            Xmap.put(s, Xmap.getOrDefault(s, 0) + 1);
         }
         for (char ch : Y.toCharArray()) {
-            countY[ch - '0']++; // 아스키코드를 정수로 변환
-        } 
-
-        StringBuilder sb = new StringBuilder();
+            String s = String.valueOf(ch);
+            Ymap.put(s, Ymap.getOrDefault(s, 0) + 1);
+        }
         
-        // 9부터 0까지 공통 숫자(짝궁) 이어붙이기
-        for (int i = 9; i >= 0; i--) {
-            int common = Math.min(countX[i], countY[i]);
-            for (int j = 0; j < common; j++) {
-                sb.append(i);
+        StringBuilder answer = new StringBuilder();
+        for(int i = 9; i >= 0; i--) {
+            String digit = String.valueOf(i);
+            if(Xmap.containsKey(digit) && Ymap.containsKey(digit)) {
+                int Xnumb = Xmap.get(digit);
+                int Ynumb = Ymap.get(digit);
+                int Znumb = Math.min(Xnumb, Ynumb);
+                for(int j = 0; j < Znumb; j++) {
+                    answer.append(digit);
+                }
+                
             }
         }
         
-        if (sb.length() == 0) return "-1";
-        if (sb.charAt(0) == '0') return "0";  // "0000"처럼 0만 있을 경우
+        if (answer.length() == 0) return "-1";       // 공통 숫자 없음
+        if (answer.charAt(0) == '0') return "0"; // 0000 처럼 0만 있는 경우
         
-        return sb.toString();
+        
+        return answer.toString();
     }
 }
