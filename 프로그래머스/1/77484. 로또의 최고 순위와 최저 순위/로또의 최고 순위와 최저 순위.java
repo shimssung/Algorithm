@@ -1,28 +1,36 @@
+import java.util.Set;
+import java.util.HashSet;
+
 class Solution {
-    // 처음 0을 제외한 나머지 숫자와 맞는 갯수 = 최저 순위
-    // 최저 순위 + 0의 갯수 = 최고 순위
     public int[] solution(int[] lottos, int[] win_nums) {
         int[] answer = new int[2];
-        int lowrank = 0;
-        int count = 0;
+        
+        // 알아볼수없는번호 : 0
+        // 당첨 최고순위와 최저순위 리턴
+        int zero = 0;
+        int hit = 0;
+        
+        Set<Integer> nums = new HashSet<>();
+        
+        for(int n : win_nums) {
+            nums.add(n);
+        }
         
         for(int i = 0; i < lottos.length; i++) {
-            if(lottos[i] == 0) {
-                    count++;
-            }
+            if(lottos[i] == 0) zero++;
+            if(nums.contains(lottos[i])) hit++;
         }
         
-        for(int i = 0; i < win_nums.length; i++) {
-            for(int j = 0; j < lottos.length; j++) {
-                if(win_nums[i] == lottos[j]) {
-                    lowrank++;
-                }
-            }
-        }
-        int[] score = {6, 6, 5, 4, 3, 2, 1};
-        answer[0] = score[lowrank + count];
-        answer[1] = score[lowrank]; 
+        int min = getRank(hit);
+        int max = getRank(hit + zero);
+        
+        answer[0] = max;
+        answer[1] = min;
         
         return answer;
+    }
+    
+    public int getRank(int count) {
+        return count >= 2 ? 7 - count : 6;
     }
 }
