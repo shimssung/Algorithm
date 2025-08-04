@@ -1,12 +1,15 @@
 class Solution {
     public int solution(String s) {
+        int answer = 0;
+        String S = s;
+        String[] result = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
         
-        String[] word = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-        
-        for(int i = 0; i < word.length; i++) {
-            s = s.replace(word[i], Integer.toString(i));
+        for(int i = 0; i < result.length; i++) {
+            S = S.replace(result[i], i+"");
         }
         
-        return Integer.parseInt(s);
+        answer = Integer.parseInt(S);
+        
+        return answer;
     }
 }
