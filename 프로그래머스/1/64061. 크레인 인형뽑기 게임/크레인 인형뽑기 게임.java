@@ -1,36 +1,29 @@
-import java.util.List;
-import java.util.LinkedList;
+import java.util.Stack;
 
 class Solution {
     public int solution(int[][] board, int[] moves) {
-        // 숫자는 각기 다른 인형
-        // 같은 숫자가 연속으로 바구니에 들어가면 사라진다 answer++
-        
         int answer = 0;
         
-        // 바구니
-        List<Integer> b = new LinkedList<>();
+        // 0은 빈칸
+        // 터진 횟수 반환
         
-        // moves만큼 반복
-        for(int m : moves) {
-            for(int i = 0; i < board.length; i++) {
-                if(board[i][m-1] > 0) {
-                    b.add(board[i][m-1]);
-                    board[i][m-1] = 0;
+        Stack<Integer> result = new Stack<>();
+        
+        for(int i = 0; i < moves.length; i++) {
+            for(int j = 0; j < board.length; j++) {
+                if(board[j][moves[i]-1] == 0) {
+                    continue;
+                } else {
+                    result.push(board[j][moves[i]-1]);
+                    board[j][moves[i]-1] = 0;
                     break;
                 }
             }
-        }
-        
-        boolean boom = true;
-        while(boom) {
-            boom = false;
-            for(int i = b.size()-1; i > 0; i--) {
-                if(b.get(i).equals(b.get(i - 1))) {
-                    b.remove(i);
-                    b.remove(i-1);
-                    boom = true;
+            if(result.size() > 1) {
+                if(result.get(result.size()-1) == result.get(result.size()-2)) {
                     answer += 2;
+                    result.pop();
+                    result.pop();
                 }
             }
         }
