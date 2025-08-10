@@ -1,41 +1,45 @@
 class Solution {
     public int solution(String dartResult) {
-        int[] scores = new int[3];
-        int idx = -1;
-        for (int i = 0; i < dartResult.length(); i++) {
-            char c = dartResult.charAt(i);
-            
-            // 점수 추출
-            if (Character.isDigit(c)) {
-                idx++;
-                if (c == '1' && i + 1 < dartResult.length() && dartResult.charAt(i + 1) == '0') {
-                    scores[idx] = 10;
-                    i++; // '0' 스킵
-                } else {
-                    scores[idx] = c - '0';
+        String[] s = dartResult.split("");
+        int[] score = new int[3];
+        int idx = 0;
+
+        for (int i = 0; i < s.length; ) {
+            // 1) 숫자 파싱 (10 처리)
+            int now;
+            if (s[i].equals("1") && i + 1 < s.length && s[i + 1].equals("0")) {
+                now = 10;
+                i += 2;
+            } else {
+                now = Integer.parseInt(s[i]);
+                i++;
+            }
+
+            // 2) 보너스 S/D/T
+            if (s[i].equals("S")) {
+                // now 그대로
+            } else if (s[i].equals("D")) {
+                now = now * now;
+            } else if (s[i].equals("T")) {
+                now = now * now * now;
+            }
+            i++; // 보너스 문자 소비
+
+            // 3) 옵션 (*, #) - 있을 수도 있음
+            if (i < s.length) {
+                if (s[i].equals("*")) {
+                    now *= 2;
+                    if (idx > 0) score[idx - 1] *= 2;
+                    i++; // 옵션 소비
+                } else if (s[i].equals("#")) {
+                    now *= -1;
+                    i++; // 옵션 소비
                 }
-                
             }
-            // 보너스 처리
-            else if (c == 'S') {
-                scores[idx] = (int) Math.pow(scores[idx], 1);
-            } else if (c == 'D') {
-                scores[idx] = (int) Math.pow(scores[idx], 2);
-            } else if (c == 'T') {
-                scores[idx] = (int) Math.pow(scores[idx], 3);
-            }
-            
-            // 옵션 처리
-            else if (c == '*') {
-                if (idx > 0) {
-                    scores[idx - 1] *= 2;
-                }
-                scores[idx] *= 2;
-            } else if (c == '#') {
-                scores[idx] *= -1;
-            }
+
+            score[idx++] = now;
         }
-        
-        return scores[0] + scores[1] + scores[2];
+
+        return score[0] + score[1] + score[2];
     }
 }
