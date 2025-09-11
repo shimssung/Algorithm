@@ -1,21 +1,25 @@
+import java.util.*;
+
 class Solution {
     boolean solution(String s) {
         boolean answer = true;
         
+        Deque<String> stack = new ArrayDeque<>();
+        
         String[] str = s.split("");
-        
-        int c1 = 0;
-        int c2 = 0;
-        
-        for(int i = 0; i < str.length; i++) {
-            if(str[i].equals("(")) c1++;
-            if(str[i].equals(")")) {
-                c2++;
-                if(c1 < c2) answer = false;
+        for(String s1 : str) {
+            if(s1.equals("(")) {
+                stack.push("(");
+            } else {
+                if(stack.isEmpty()) {
+                    answer = false;
+                    break;
+                }
+                stack.pop();
             }
         }
         
-        if(c1 != c2) answer = false;
+        if(!stack.isEmpty()) answer = false;
 
         return answer;
     }
